@@ -110,7 +110,7 @@ console.log("🔵 CONTENT SCRIPT LOADED");
         previewActive = true;
         previewSlotIds = freeSlotIndices;
 
-        // Just highlight the free slots - don't try to auto-confirm
+        // Highlight the free slots
         for (const idx of freeSlotIndices) {
             const el = getSlotElement(idx);
             if (el) {
@@ -118,8 +118,13 @@ console.log("🔵 CONTENT SCRIPT LOADED");
             }
         }
 
-        // Show banner with auto-select button
-        showBannerWithButton(freeSlotIndices.length);
+        // Show toast notification
+        showToast(`✅ Auto-selecting ${freeSlotIndices.length} free slots...`);
+
+        // Automatically select the slots after a brief delay
+        setTimeout(() => {
+            autoSelectSlots();
+        }, 500);
     }
 
     function clearPreview() {
