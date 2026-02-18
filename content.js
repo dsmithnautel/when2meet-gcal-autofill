@@ -122,9 +122,10 @@ console.log("🔵 CONTENT SCRIPT LOADED");
         showToast(`✅ Auto-selecting ${freeSlotIndices.length} free slots...`);
 
         // Automatically select the slots after a brief delay
+        // Increased delay to ensure page is ready
         setTimeout(() => {
             autoSelectSlots();
-        }, 500);
+        }, 1000);
     }
 
     function clearPreview() {
@@ -196,9 +197,11 @@ console.log("🔵 CONTENT SCRIPT LOADED");
         }
 
         // Approach 2: Also trigger server save directly
+        // Longer delay to ensure UI simulation completes and When2Meet processes the changes
         setTimeout(() => {
+            console.log("🔄 Triggering server save after UI simulation...");
             confirmAutofill();
-        }, 500); // Small delay to let UI update
+        }, 1500); // Increased from 500ms to 1500ms
     }
 
     function simulateClick(element) {
