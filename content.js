@@ -115,9 +115,6 @@ console.log("🔵 CONTENT SCRIPT LOADED");
             const el = getSlotElement(idx);
             if (el) {
                 el.classList.add("w2m-gcal-preview-available");
-                // Add a more obvious border
-                el.style.border = "3px solid lime";
-                el.style.boxSizing = "border-box";
             }
         }
 
