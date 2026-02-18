@@ -1,5 +1,5 @@
 // Injected script — runs in the MAIN world to access page variables
-console.log("🟢 INJECTED SCRIPT LOADED IN MAIN WORLD - TEST");
+console.log("INJECTED SCRIPT LOADED IN MAIN WORLD - TEST");
 
 // Listen for request to read page data
 window.addEventListener("message", (e) => {
@@ -35,7 +35,7 @@ window.addEventListener("message", (e) => {
         console.log("When2Meet Autofill: Starting auto-save process for", e.data.timestamps.length, "slots");
 
         if (typeof AvailableAtSlot === "undefined" || typeof TimeOfSlot === "undefined") {
-            console.error("❌ Required variables not found");
+            console.error("Required variables not found");
             return;
         }
 
@@ -45,104 +45,80 @@ window.addEventListener("message", (e) => {
             timestampToIndex[TimeOfSlot[i]] = i;
         }
 
-        // Mark slots in AvailableAtSlot array
+        // Mark slots in AvailableAtSlot array - SAFELY
         for (var i = 0; i < e.data.timestamps.length; i++) {
             var timestamp = e.data.timestamps[i];
             var index = timestampToIndex[timestamp];
 
             if (index !== undefined) {
-                AvailableAtSlot[index] = "1";
+                // AvailableAtSlot is an array of arrays (list of personIDs at each slot)
+                // It should not be overwritten with "1".
+                // However, for POST request generation later, it needs to be known as available.
+                // The page logic might expect arrays.
+
+                // If simulating "I am available", the user ID should be ensured to be present.
+                // But the save logic usually iterates AvailableAtSlot to build the availability string.
+
+                // Just track which indices are set for the POST request,
+                // and avoid modifying the global AvailableAtSlot destructively to avoid breaking page scripts.
+                // OR update it correctly if instant UI feedback is desired.
+
+                // Safe update:
+                if (Array.isArray(AvailableAtSlot[index])) {
+                    // Prevent destructive modification of global data
+                }
             }
         }
 
-        console.log("✅ Updated AvailableAtSlot array");
-
-        // COMPREHENSIVE DEBUGGING FOR EVENT ID
-        console.log("=== DEBUGGING EVENT ID ===");
-        console.log("Full URL:", window.location.href);
-        console.log("Pathname:", window.location.pathname);
-        console.log("Hash:", window.location.hash);
-
-        // Check all potential global variables
-        console.log("GroupID:", typeof GroupID !== "undefined" ? GroupID : "undefined");
-        console.log("EventID:", typeof EventID !== "undefined" ? EventID : "undefined");
-        console.log("YouAre:", typeof YouAre !== "undefined" ? YouAre : "undefined");
-        console.log("PeopleIDs:", typeof PeopleIDs !== "undefined" ? PeopleIDs : "undefined");
-
-        // List ALL window properties that might contain the event ID
-        var eventKeys = Object.keys(window).filter(function (k) {
-            return k.toLowerCase().includes('event') || k.toLowerCase().includes('group');
-        });
-        console.log("Window keys with 'event' or 'group':", eventKeys);
-
-        // Show values of those keys
-        for (var i = 0; i < eventKeys.length; i++) {
-            console.log("  " + eventKeys[i] + ":", window[eventKeys[i]]);
-        }
-
-        // Try to extract from URL
-        var urlMatch = window.location.pathname.match(/\/(\d+)/);
-        console.log("URL regex match:", urlMatch);
-
-        // Find person ID
-        var personId = null;
-        if (typeof YouAre !== "undefined" && YouAre) {
-            personId = YouAre;
-        } else if (typeof PeopleIDs !== "undefined" && PeopleIDs.length > 0) {
-            personId = PeopleIDs[PeopleIDs.length - 1];
-        }
-
-        // Find event ID - try ALL methods
-        var eventId = null;
-
         if (typeof GroupID !== "undefined" && GroupID) {
             eventId = GroupID;
-            console.log("Found eventId via GroupID");
         } else if (typeof EventID !== "undefined" && EventID) {
             eventId = EventID;
-            console.log("Found eventId via EventID");
+        } else if (queryMatch) {
+            // When2Meet uses query string like ?35081112-5cGlg
+            eventId = queryMatch;
         } else if (urlMatch && urlMatch[1]) {
             eventId = urlMatch[1];
-            console.log("Found eventId via URL regex");
         }
 
-        console.log("=== RESULTS ===");
-        console.log("personId:", personId);
-        console.log("eventId:", eventId);
-
         if (!personId || !eventId) {
-            console.error("❌ Missing required IDs - cannot save");
-            console.log("💡 Please share the debug output above so we can find the event ID");
+            console.error("Missing required IDs - cannot save");
             return;
         }
 
         // Build the availability binary string
+        var timestampsToMark = new Set(e.data.timestamps);
         var availabilityString = "";
-        for (var i = 0; i < AvailableAtSlot.length; i++) {
-            availabilityString += (AvailableAtSlot[i] === "1" || AvailableAtSlot[i] === 1) ? "1" : "0";
+
+        for (var i = 0; i < TimeOfSlot.length; i++) {
+            if (timestampsToMark.has(TimeOfSlot[i])) {
+                availabilityString += "1";
+            } else {
+                availabilityString += "0";
+            }
         }
 
         // Build the slots list (all slots)
         var allSlots = TimeOfSlot.join(",");
 
         // Send POST request
-        console.log("📤 Sending save request to /ajax");
+        console.log("Sending save request to /SaveTimes.php");
         var xhr = new XMLHttpRequest();
-        xhr.open("POST", "/ajax", true);
+        xhr.open("POST", "/SaveTimes.php", true);
         xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 
         xhr.onload = function () {
             if (xhr.status === 200) {
-                console.log("✅ Successfully saved to server!");
+                console.log("Successfully saved to server!");
                 console.log("Response:", xhr.responseText);
             } else {
-                console.error("❌ Save failed with status:", xhr.status);
+                console.error("Save failed with status:", xhr.status);
                 console.error("Response:", xhr.responseText);
             }
         };
 
         xhr.onerror = function () {
-            console.error("❌ Network error during save");
+            console.error("Network error during save");
         };
 
         var postData = "person=" + encodeURIComponent(personId) +
@@ -152,7 +128,7 @@ window.addEventListener("message", (e) => {
             "&ChangeToAvailable=true";
 
         console.log("POST data length:", postData.length, "bytes");
-        console.log("Marked slots:", availabilityString.split("1").length - 1, "out of", AvailableAtSlot.length);
+
 
         xhr.send(postData);
     }

@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>When2Meet Autofill</title>
   <link rel="stylesheet" href="popup.css" />
 </head>
+
 <body>
   <!-- Header -->
   <header class="header">
@@ -17,12 +19,10 @@
 
   <!-- Status Messages -->
   <div id="status-not-when2meet" class="status-card hidden">
-    <div class="status-icon">🔗</div>
     <p>Navigate to a <strong>When2Meet event page</strong> to use this extension.</p>
   </div>
 
   <div id="status-error" class="status-card status-error hidden">
-    <div class="status-icon">⚠️</div>
     <p id="error-message"></p>
   </div>
 
@@ -51,7 +51,7 @@
     <!-- Actions -->
     <div class="actions">
       <button id="btn-autofill" class="btn btn-primary btn-full">
-        ✨ Autofill Availability
+        Autofill Availability
       </button>
       <button id="btn-sign-out" class="btn btn-ghost btn-full">
         Sign Out
@@ -67,4 +67,5 @@
 
   <script src="popup.js"></script>
 </body>
+
 </html>

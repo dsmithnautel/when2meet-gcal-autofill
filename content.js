@@ -1,7 +1,7 @@
 // Content script — injected into When2Meet pages
 // Handles: parsing the time grid, computing availability, preview overlay, and confirming
 
-console.log("🔵 CONTENT SCRIPT LOADED");
+console.log("CONTENT SCRIPT LOADED");
 
 (() => {
     // ── State ─────────────────────────────────────────────────────────────
@@ -17,13 +17,7 @@ console.log("🔵 CONTENT SCRIPT LOADED");
     }
 
     // ── Parse When2Meet grid ──────────────────────────────────────────────
-    // When2Meet exposes:
-    //   - TimeOfSlot[slotIndex] = unix timestamp (seconds)
-    //   - AvailableAtSlot[slotIndex] = array of available user IDs
-    // Each slot element has id="YouTimeN" where N is the slot index,
-    // and a data-time attribute with the unix timestamp.
-    //
-    // We use an injected <script> tag to read these variables from the page's
+    // An injected <script> tag is used to read these variables from the page's
     // JS context (content scripts run in an isolated world).
 
     function getPageData() {
@@ -32,9 +26,7 @@ console.log("🔵 CONTENT SCRIPT LOADED");
 
             // 1. Set up listener for response
             const handler = (e) => {
-                console.log("🔵 content.js received message:", e.data?.type, e.data);
                 if (e.data && e.data.type === "__w2m_gcal_data") {
-                    console.log("✅ Matched __w2m_gcal_data, resolving with:", e.data.data);
                     clearTimeout(timeoutId);
                     window.removeEventListener("message", handler);
                     resolve(e.data.data);
@@ -43,7 +35,7 @@ console.log("🔵 CONTENT SCRIPT LOADED");
             window.addEventListener("message", handler);
 
             // 2. Dispatch request event (caught by injected.js in MAIN world)
-            console.log("When2Meet Autofill: Dispatching __w2m_request_data event");
+
             window.postMessage({ type: "__w2m_request_data" }, "*");
 
             // 3. Fallback timeout
@@ -73,7 +65,6 @@ console.log("🔵 CONTENT SCRIPT LOADED");
     function computeFreeSlots(slots, busyEvents) {
         // When2Meet slots are 15-minute intervals.
         // A slot is "free" if NO busy event overlaps it.
-        // Slot timestamp is in seconds (unix); event start/end are ISO strings.
 
         const freeSlotIndices = [];
 
@@ -119,7 +110,7 @@ console.log("🔵 CONTENT SCRIPT LOADED");
         }
 
         // Show toast notification
-        showToast(`✅ Auto-selecting ${freeSlotIndices.length} free slots...`);
+        showToast(`Auto-selecting ${freeSlotIndices.length} free slots...`);
 
         // Automatically select the slots after a brief delay
         // Increased delay to ensure page is ready
@@ -146,35 +137,11 @@ console.log("🔵 CONTENT SCRIPT LOADED");
 
     // ── Banner with Auto-Select Button ───────────────────────────────────
 
-    function showBannerWithButton(slotCount) {
-        // Remove any existing banner
-        if (bannerEl) {
-            bannerEl.remove();
-        }
 
-        // Create banner
-        bannerEl = document.createElement("div");
-        bannerEl.className = "w2m-gcal-banner";
-        bannerEl.innerHTML = `
-            <div class="w2m-gcal-banner-content">
-                <span class="w2m-gcal-banner-text">✅ ${slotCount} free slots highlighted</span>
-                <div class="w2m-gcal-banner-buttons">
-                    <button id="w2m-gcal-auto-select" class="w2m-gcal-btn w2m-gcal-btn-primary">Auto-Select All</button>
-                    <button id="w2m-gcal-cancel" class="w2m-gcal-btn w2m-gcal-btn-secondary">Cancel</button>
-                </div>
-            </div>
-        `;
-        document.body.appendChild(bannerEl);
-
-        // Attach event listeners
-        document.getElementById("w2m-gcal-auto-select").addEventListener("click", autoSelectSlots);
-        document.getElementById("w2m-gcal-cancel").addEventListener("click", cancelPreview);
-    }
 
     // ── Auto-Select Slots via Mouse Simulation ───────────────────────────
 
     function autoSelectSlots() {
-        console.log("When2Meet Autofill: Auto-selecting", previewSlotIds.length, "slots");
 
         // Get all slot elements
         const slotElements = [];
@@ -186,12 +153,11 @@ console.log("🔵 CONTENT SCRIPT LOADED");
         }
 
         if (slotElements.length === 0) {
-            showToast("❌ No slot elements found to select");
+            showToast("No slot elements found to select");
             return;
         }
 
         // Approach 1: Simulate mouse clicks on each slot
-        console.log("Simulating clicks on", slotElements.length, "slots");
         for (const el of slotElements) {
             simulateClick(el);
         }
@@ -199,7 +165,6 @@ console.log("🔵 CONTENT SCRIPT LOADED");
         // Approach 2: Also trigger server save directly
         // Longer delay to ensure UI simulation completes and When2Meet processes the changes
         setTimeout(() => {
-            console.log("🔄 Triggering server save after UI simulation...");
             confirmAutofill();
         }, 1500); // Increased from 500ms to 1500ms
     }
@@ -242,11 +207,8 @@ console.log("🔵 CONTENT SCRIPT LOADED");
     // ── Confirm: Directly modify When2Meet's state ───────────────────────
 
     function confirmAutofill() {
-        console.log("When2Meet Autofill: confirmAutofill called, previewSlotIds:", previewSlotIds);
         const timestamps = [...previewSlotIds];
         clearPreview();
-
-        console.log("When2Meet Autofill: Marking", timestamps.length, "slots via direct state modification");
 
         // Dispatch event to injected script to modify AvailableAtSlot directly  
         window.postMessage({
@@ -255,7 +217,7 @@ console.log("🔵 CONTENT SCRIPT LOADED");
         }, "*");
 
         // Show success toast
-        showToast(`✅ Marked ${timestamps.length} slots as available!`);
+        showToast(`Marked ${timestamps.length} slots as available!`);
     }
 
     function cancelPreview() {

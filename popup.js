@@ -186,7 +186,7 @@ btnAutofill.addEventListener("click", async () => {
     }
 
     btnAutofill.disabled = true;
-    btnAutofill.textContent = "⏳ Fetching events...";
+    btnAutofill.textContent = "Fetching events...";
 
     // Send message to content script to start autofill
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
@@ -207,7 +207,7 @@ btnAutofill.addEventListener("click", async () => {
                 // else: content script handles the rest
 
                 btnAutofill.disabled = false;
-                btnAutofill.innerHTML = "✨ Autofill Availability";
+                btnAutofill.innerHTML = "Autofill Availability";
             }
         );
     });
