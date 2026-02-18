@@ -67,5 +67,4 @@ with your actual Client ID:
 3. Click the **extension icon** in your Chrome toolbar
 4. **Sign in with Google** (first time only)
 5. Choose which calendars to include/ignore
-6. Click **✨ Autofill Availability**
-7. **Review** the green highlighted slots → click **✓ Confirm** or **✕ Cancel**
+6. Click **Autofill Availability**
