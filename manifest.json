@@ -1,0 +1,45 @@
+{
+  "manifest_version": 3,
+  "name": "When2Meet Google Calendar Autofill",
+  "version": "1.0.0",
+  "description": "Autofill your When2Meet availability from your Google Calendar events.",
+  "permissions": [
+    "identity",
+    "activeTab",
+    "storage"
+  ],
+  "oauth2": {
+    "client_id": "976837464910-beh11fbf64g0j63u4igtg04nnmp2o5h2.apps.googleusercontent.com",
+    "scopes": [
+      "https://www.googleapis.com/auth/calendar.readonly"
+    ]
+  },
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "*://*.when2meet.com/*"
+      ],
+      "js": [
+        "content.js"
+      ],
+      "css": [
+        "content.css"
+      ]
+    },
+    {
+      "matches": [
+        "*://*.when2meet.com/*"
+      ],
+      "js": [
+        "injected.js"
+      ],
+      "world": "MAIN"
+    }
+  ]
+}

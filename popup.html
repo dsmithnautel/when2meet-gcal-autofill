@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>When2Meet Autofill</title>
+  <link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="header-brand">
+      <span class="header-icon">📅</span>
+      <h1>When2Meet Autofill</h1>
+    </div>
+  </header>
+
+  <!-- Status Messages -->
+  <div id="status-not-when2meet" class="status-card hidden">
+    <div class="status-icon">🔗</div>
+    <p>Navigate to a <strong>When2Meet event page</strong> to use this extension.</p>
+  </div>
+
+  <div id="status-error" class="status-card status-error hidden">
+    <div class="status-icon">⚠️</div>
+    <p id="error-message"></p>
+  </div>
+
+  <!-- Signed-out View -->
+  <div id="view-signed-out" class="view hidden">
+    <div class="sign-in-card">
+      <p>Sign in with your Google account to access your calendar.</p>
+      <button id="btn-sign-in" class="btn btn-primary">
+        <span class="google-icon">G</span>
+        Sign in with Google
+      </button>
+    </div>
+  </div>
+
+  <!-- Signed-in View -->
+  <div id="view-signed-in" class="view hidden">
+    <!-- Calendar List -->
+    <div class="section">
+      <h2 class="section-title">Your Calendars</h2>
+      <p class="section-subtitle">Uncheck calendars to ignore their events</p>
+      <div id="calendar-list" class="calendar-list">
+        <!-- Populated by JS -->
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="actions">
+      <button id="btn-autofill" class="btn btn-primary btn-full">
+        ✨ Autofill Availability
+      </button>
+      <button id="btn-sign-out" class="btn btn-ghost btn-full">
+        Sign Out
+      </button>
+    </div>
+  </div>
+
+  <!-- Loading -->
+  <div id="view-loading" class="view">
+    <div class="loading-spinner"></div>
+    <p class="loading-text">Loading...</p>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

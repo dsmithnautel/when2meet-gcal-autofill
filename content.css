@@ -1,0 +1,147 @@
+/* ── When2Meet Google Calendar Autofill — Content Script Styles ───── */
+
+/* Preview highlight for available slots */
+.w2m-gcal-preview-available {
+    background: rgba(76, 175, 80, 0.5) !important;
+    outline: 1px solid rgba(76, 175, 80, 0.8);
+    outline-offset: -1px;
+    position: relative;
+    z-index: 10;
+    transition: background 0.15s ease;
+}
+
+/* Confirmation banner (fixed at top of page) */
+.w2m-gcal-banner {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100000;
+    background: linear-gradient(135deg, #1a1a2e, #16213e);
+    border-bottom: 2px solid #4facfe;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+    animation: w2m-gcal-slide-down 0.3s ease-out;
+}
+
+@keyframes w2m-gcal-slide-down {
+    from {
+        transform: translateY(-100%);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.w2m-gcal-banner-content {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 14px 20px;
+}
+
+.w2m-gcal-banner-icon {
+    font-size: 22px;
+}
+
+.w2m-gcal-banner-text {
+    flex: 1;
+    color: #e0e0e8;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    font-size: 14px;
+}
+
+.w2m-gcal-banner-text strong {
+    color: #4facfe;
+    font-size: 16px;
+}
+
+/* Banner buttons */
+.w2m-gcal-banner-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.w2m-gcal-btn {
+    padding: 8px 20px;
+    border: none;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    transition: all 0.15s ease;
+}
+
+.w2m-gcal-btn-primary {
+    background: linear-gradient(135deg, #4caf50, #45a049);
+    color: white;
+}
+
+.w2m-gcal-btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 3px 12px rgba(76, 175, 80, 0.4);
+}
+
+.w2m-gcal-btn-secondary {
+    background: rgba(255, 255, 255, 0.08);
+    color: #aaa;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.w2m-gcal-btn-secondary:hover {
+    background: rgba(255, 82, 82, 0.15);
+    color: #ff7070;
+    border-color: rgba(255, 82, 82, 0.3);
+}
+
+/* Legacy button classes (kept for compatibility) */
+.w2m-gcal-btn-confirm {
+    background: linear-gradient(135deg, #4caf50, #45a049);
+    color: white;
+}
+
+.w2m-gcal-btn-confirm:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 3px 12px rgba(76, 175, 80, 0.4);
+}
+
+.w2m-gcal-btn-cancel {
+    background: rgba(255, 255, 255, 0.08);
+    color: #aaa;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.w2m-gcal-btn-cancel:hover {
+    background: rgba(255, 82, 82, 0.15);
+    color: #ff7070;
+    border-color: rgba(255, 82, 82, 0.3);
+}
+
+/* Toast notification */
+.w2m-gcal-toast {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: #1a1a2e;
+    color: #e0e0e8;
+    padding: 12px 24px;
+    border-radius: 10px;
+    border: 1px solid rgba(79, 172, 254, 0.3);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    font-size: 14px;
+    z-index: 100001;
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+
+.w2m-gcal-toast-visible {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
