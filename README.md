@@ -12,7 +12,6 @@ A Chrome extension to automatically fill your [When2Meet](https://www.when2meet.
 ## How to Install
 
 ### Option A: Install from Chrome Web Store (Recommended for Users)
-**Note to Developer**: To make this link work for others, the developer must publish the extension to the Chrome Web Store.
 > [Link to Chrome Web Store would go here]
 
 ### Option B: Load Unpacked (Developer Mode)
