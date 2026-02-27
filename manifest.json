@@ -1,7 +1,8 @@
 {
   "manifest_version": 3,
   "name": "When2Meet Google Calendar Autofill",
-  "version": "1.0.0",
+  "version": "1.0.1",
+  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA62fRoWu9i67PKgdvapGDfhq0kpv+cacr3riRimB2MmdU2sJAQKs9t8lMPXugRzQOwjqQRz5WQz0MQfOyBW253TAOFyzQKkPaBSemHBZjkxwmBm65AS+3f+9bpC6vtEU8lxmVLnHQQhUOKw+x+gh/Lxv/1E37Bg0Gawdhj4i5iks3dmXtfluJ45teMRAs7TYi0OF5UPWoV6RTPA8/oWG+oollu+CztXhfospfpdBsI6H4Df7+7Hm9ygRggHSGolREj4Sx4OSkT77W3q4LDXjmEK85L6FW5zq0xY02K/e8IX2LWw/cuJab7EFB7yMqtzawv6ohU1Gv0fGGSt8Yf7JGVQIDAQAB",
   "description": "Autofill your When2Meet availability from your Google Calendar events.",
   "permissions": [
     "identity",
