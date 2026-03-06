@@ -5,11 +5,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="google-site-verification" content="L-oKnzH7NUOb3DtzRBtZLPTzw_2JffK75x2YfrsdVDA" />
-    <title>When2Meet Google Calendar Autofill</title>
+    <meta name="description"
+        content="When2Meet Google Calendar Autofill is a Chrome extension that reads your Google Calendar busy times and automatically fills in your availability on When2Meet.">
+    <title>When2Meet Google Calendar Autofill - Home</title>
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            line-height: 1.6;
+            line-height: 1.7;
             color: #333;
             max-width: 800px;
             margin: 0 auto;
@@ -18,6 +20,12 @@
 
         h1 {
             color: #2c3e50;
+            margin-bottom: 0.25rem;
+        }
+
+        h2 {
+            color: #2c3e50;
+            margin-top: 2rem;
         }
 
         .hero {
@@ -33,11 +41,44 @@
             border-radius: 20%;
         }
 
-        .links {
+        .subtitle {
+            color: #666;
+            font-size: 1.1rem;
+            margin-top: 0;
+        }
+
+        .purpose {
+            background: #f8f9fa;
+            padding: 1.5rem 2rem;
+            border-radius: 8px;
+            border-left: 4px solid #3498db;
+            text-align: left;
+            margin: 2rem auto;
+            max-width: 650px;
+        }
+
+        .purpose h2 {
+            margin-top: 0;
+            color: #2c3e50;
+        }
+
+        .purpose p {
+            margin-bottom: 0;
+        }
+
+        .nav-links {
             display: flex;
-            gap: 1rem;
+            gap: 1.5rem;
             justify-content: center;
-            margin-top: 1.5rem;
+            margin-top: 2rem;
+            background: #eef2f5;
+            padding: 1rem;
+            border-radius: 8px;
+            font-size: 1.1rem;
+        }
+
+        .nav-links .separator {
+            color: #ccc;
         }
 
         a {
@@ -48,6 +89,19 @@
         a:hover {
             text-decoration: underline;
         }
+
+        .privacy-link {
+            font-weight: bold;
+            color: #e74c3c;
+        }
+
+        ul {
+            padding-left: 1.5rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
     </style>
 </head>
 
@@ -55,31 +109,45 @@
     <div class="hero">
         <img src="icons/logo2.png" alt="When2Meet Google Calendar Autofill Logo">
         <h1>When2Meet Google Calendar Autofill</h1>
+        <p class="subtitle">A Chrome extension to autofill When2Meet from your Google Calendar</p>
 
-        <div class="purpose-statement"
-            style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; border-left: 4px solid #3498db; text-align: left; margin: 2rem auto; max-width: 600px;">
-            <h3 style="margin-top: 0; color: #2c3e50;">App Purpose:</h3>
-            <p style="margin-bottom: 0;"><strong>When2Meet Google Calendar Autofill</strong> is a browser extension
-                designed to save you time. Its sole purpose is to read your Google Calendar events (busy times) and
-                automatically fill out your availability on When2Meet.com scheduling grids.</p>
+        <div class="purpose">
+            <h2>What does this app do?</h2>
+            <p><strong>When2Meet Google Calendar Autofill</strong> is a browser extension that reads your
+                Google Calendar events to determine when you are busy, then automatically fills in your
+                available time slots on <a href="https://www.when2meet.com/" target="_blank"
+                    rel="noopener">When2Meet.com</a> scheduling grids. It saves you the tedious work of
+                manually cross-referencing your calendar and clicking each slot. All calendar data is
+                processed locally in your browser and is never sent to any external server.</p>
         </div>
 
-        <div class="links"
-            style="font-size: 1.2rem; margin-top: 2rem; background: #eef2f5; padding: 1rem; border-radius: 8px;">
-            <a href="PRIVACY_POLICY.md" target="_blank" style="font-weight: bold; color: #e74c3c;">📄 View Privacy
-                Policy</a>
-            <span style="color: #ccc;">|</span>
-            <a href="https://github.com/dsmithnautel/when2meet-gcal-autofill" target="_blank">View on GitHub</a>
+        <div class="nav-links">
+            <a class="privacy-link" href="https://when2meetfiller.tech/privacy-policy.html">Privacy Policy</a>
+            <span class="separator">|</span>
+            <a href="https://github.com/dsmithnautel/when2meet-gcal-autofill" target="_blank" rel="noopener">View on
+                GitHub</a>
         </div>
     </div>
 
     <h2>Features</h2>
     <ul>
-        <li><strong>Google Calendar Integration:</strong> Sign in securely to fetch your busy times.</li>
-        <li><strong>Smart Autofill:</strong> Automatically selects all free slots on the When2Meet grid.</li>
-        <li><strong>Custom Calendars:</strong> Choose exactly which calendars to use or ignore.</li>
-        <li><strong>Privacy First:</strong> Your calendar data is processed locally directly in your browser.</li>
+        <li><strong>Google Calendar Integration:</strong> Sign in securely with your Google account to fetch your busy
+            times.</li>
+        <li><strong>Smart Autofill:</strong> Automatically selects all free slots on the When2Meet grid, preserving any
+            slots you already selected manually.</li>
+        <li><strong>Custom Calendars:</strong> Choose exactly which calendars to include or exclude.</li>
+        <li><strong>Privacy First:</strong> Your calendar data is processed entirely within your browser &mdash; nothing
+            is stored or transmitted externally.</li>
     </ul>
+
+    <h2>How It Works</h2>
+    <ol>
+        <li>Install the extension from the Chrome Web Store.</li>
+        <li>Navigate to a When2Meet event and enter your name.</li>
+        <li>Click the extension icon and sign in with Google.</li>
+        <li>Select which calendars to check, then click Autofill.</li>
+        <li>The extension marks all your free time slots automatically.</li>
+    </ol>
 </body>
 
 </html>
