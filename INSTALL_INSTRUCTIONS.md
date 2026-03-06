@@ -12,21 +12,8 @@
 
 5. The extension should now appear in your extensions list
 
-## Test if Extension Loaded
+## Installation Instructions
 
-1. Go to any When2Meet event (e.g., https://www.when2meet.com/)2. Open DevTools Console (F12)
-3. **Type this in the filter box**: `When2Meet`
-4. **Refresh the page** (Ctrl+Shift+R)
-5. You should see: `When2Meet Autofill: Injected script loaded in MAIN world`
+Please refer to [README.md](README.md) for installation and distribution instructions.
 
-## If You Don't See Extension Logs
-
-The extension isn't loading properly. Check:
-
-- Is the extension enabled in `chrome://extensions/`?
-- Are there any errors shown for the extension in `chrome://extensions/`?
-- Did you hard-refresh the When2Meet page after loading the extension?
-
-## Current Issue to Debug
-
-The extension logs aren't appearing in console, which means the `injected.js` script isn't running. Once we see the logs, we can fix the event ID detection and complete the save mechanism.
+For developer setup (Google Cloud configuration), see [SETUP.md](SETUP.md).

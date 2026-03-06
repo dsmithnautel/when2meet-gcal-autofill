@@ -14,9 +14,8 @@ body {
   background: #1a1a2e;
 }
 
-/* ── Header ────────────────────────────────────────────────────────── */
 .header {
-  background: linear-gradient(135deg, #16213e, #0f3460);
+  background: linear-gradient(135deg, #1e3b20, #2e5c33);
   padding: 14px 16px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
@@ -104,13 +103,13 @@ body {
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #4facfe, #00f2fe);
-  color: #0a0a1a;
+  background: #4caf50;
+  color: white;
 }
 
 .btn-primary:hover {
   transform: translateY(-1px);
-  box-shadow: 0 4px 16px rgba(79, 172, 254, 0.3);
+  box-shadow: 0 4px 16px rgba(76, 175, 80, 0.4);
 }
 
 .btn-primary:active {
@@ -155,13 +154,13 @@ body {
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.8px;
-  color: #7a7a8e;
+  color: #ffffff;
   margin-bottom: 4px;
 }
 
 .section-subtitle {
   font-size: 11px;
-  color: #55556a;
+  color: #ffffff;
   margin-bottom: 12px;
 }
 
@@ -221,10 +220,32 @@ body {
 }
 
 .calendar-item input[type="checkbox"] {
-  accent-color: #4facfe;
   width: 15px;
   height: 15px;
   cursor: pointer;
+  appearance: none;
+  background-color: #ffcdcd;
+  border-radius: 2px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.calendar-item input[type="checkbox"]:checked {
+  background-color: #4caf50;
+  border-color: #4caf50;
+}
+
+/* Custom checkmark using pseudo-element */
+.calendar-item input[type="checkbox"]:checked::after {
+  content: "";
+  width: 4px;
+  height: 8px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+  margin-bottom: 2px;
 }
 
 /* ── Actions ───────────────────────────────────────────────────────── */
@@ -238,15 +259,17 @@ body {
 .loading-spinner {
   width: 28px;
   height: 28px;
-  border: 3px solid rgba(79, 172, 254, 0.2);
-  border-top-color: #4facfe;
+  border: 3px solid rgba(76, 175, 80, 0.2);
+  border-top-color: #4caf50;
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
   margin: 24px auto 12px;
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .loading-text {

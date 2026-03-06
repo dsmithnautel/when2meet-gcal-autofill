@@ -8,6 +8,7 @@ console.log("CONTENT SCRIPT LOADED");
     let previewActive = false;
     let previewSlotIds = [];
     let bannerEl = null;
+    let alreadySelectedTimestamps = new Set();
 
     // ── Utility: send message to background service worker ────────────────
     function sendMessage(msg) {
@@ -58,6 +59,32 @@ console.log("CONTENT SCRIPT LOADED");
             document.getElementById("YouTime" + slotIndex) ||
             document.querySelector(`[data-time="${slotIndex}"]`)
         );
+    }
+
+    // ── Detect already-selected slots ────────────────────────────────────
+
+    function isSlotAlreadySelected(element) {
+        if (!element) return false;
+        const bg = window.getComputedStyle(element).backgroundColor;
+        if (!bg || bg === "transparent" || bg === "rgba(0, 0, 0, 0)") return false;
+        const match = bg.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);
+        if (!match) return false;
+        const r = parseInt(match[1]);
+        const g = parseInt(match[2]);
+        const b = parseInt(match[3]);
+        // When2Meet colors available slots green (high green, lower red/blue)
+        return g > r && g > b;
+    }
+
+    function detectAlreadySelectedSlots(slots) {
+        const selected = new Set();
+        for (const slot of slots) {
+            const el = getSlotElement(slot.timestamp);
+            if (isSlotAlreadySelected(el)) {
+                selected.add(slot.timestamp);
+            }
+        }
+        return selected;
     }
 
     // ── Compute free slots ────────────────────────────────────────────────
@@ -133,6 +160,7 @@ console.log("CONTENT SCRIPT LOADED");
 
         previewActive = false;
         previewSlotIds = [];
+        alreadySelectedTimestamps = new Set();
     }
 
     // ── Banner with Auto-Select Button ───────────────────────────────────
@@ -143,21 +171,22 @@ console.log("CONTENT SCRIPT LOADED");
 
     function autoSelectSlots() {
 
-        // Get all slot elements
+        // Get slot elements, skipping any the user already selected to avoid toggling them off
         const slotElements = [];
         for (const timestamp of previewSlotIds) {
+            if (alreadySelectedTimestamps.has(timestamp)) continue;
             const el = getSlotElement(timestamp);
             if (el) {
                 slotElements.push(el);
             }
         }
 
-        if (slotElements.length === 0) {
+        if (slotElements.length === 0 && alreadySelectedTimestamps.size === 0) {
             showToast("No slot elements found to select");
             return;
         }
 
-        // Approach 1: Simulate mouse clicks on each slot
+        // Simulate mouse clicks only on newly-selected slots
         for (const el of slotElements) {
             simulateClick(el);
         }
@@ -208,16 +237,21 @@ console.log("CONTENT SCRIPT LOADED");
 
     function confirmAutofill() {
         const timestamps = [...previewSlotIds];
+        const preserved = [...alreadySelectedTimestamps];
         clearPreview();
 
-        // Dispatch event to injected script to modify AvailableAtSlot directly  
         window.postMessage({
             type: "__w2m_mark_available",
-            timestamps: timestamps
+            timestamps: timestamps,
+            alreadySelectedTimestamps: preserved
         }, "*");
 
-        // Show success toast
-        showToast(`Marked ${timestamps.length} slots as available!`);
+        const newCount = timestamps.length - preserved.filter(t => timestamps.includes(t)).length;
+        if (preserved.length > 0) {
+            showToast(`Marked ${newCount} new slots as available (${preserved.length} existing preserved)!`);
+        } else {
+            showToast(`Marked ${timestamps.length} slots as available!`);
+        }
     }
 
     function cancelPreview() {
@@ -304,7 +338,13 @@ console.log("CONTENT SCRIPT LOADED");
                     return;
                 }
 
-                // 5. Show preview
+                // 5. Detect slots the user already selected before autofilling
+                alreadySelectedTimestamps = detectAlreadySelectedSlots(pageData.slots);
+                if (alreadySelectedTimestamps.size > 0) {
+                    console.log("When2Meet Autofill: Preserving", alreadySelectedTimestamps.size, "already-selected slots");
+                }
+
+                // 6. Show preview
                 showPreview(freeSlots);
                 sendResponse({ success: true, slotCount: freeSlots.length });
             } catch (err) {
